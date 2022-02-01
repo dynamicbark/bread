@@ -38,9 +38,8 @@ export class StatsCommand extends DiscordChatInputCommand {
     if (commandInteraction.inGuild()) {
       // Global (current guild)
       const globalGuildPosition = await getGlobalLeaderboardPositionForGuild(commandInteraction.guildId);
-      outputLines.push(
-        `Guild   : ${(await getGlobalGuildCount(commandInteraction.guildId)).toLocaleString('en-US') + formatPlace(globalGuildPosition)}`
-      );
+      const globalGuildCount = await getGlobalGuildCount(commandInteraction.guildId);
+      outputLines.push(`Guild   : ${globalGuildCount.toLocaleString('en-US') + formatPlace(globalGuildPosition, globalGuildCount)}`);
       // Global (current channel)
       outputLines.push(
         `Channel : ${(await getGlobalChannelCount(commandInteraction.guildId, commandInteraction.channelId)).toLocaleString('en-US')}`
@@ -60,31 +59,21 @@ export class StatsCommand extends DiscordChatInputCommand {
     outputLines.push(`${specifiedUser.tag.replace(/\^/g, '')}:`);
     // User (everywhere)
     const userGlobalPosition = await getGlobalLeaderboardPositionForUser(specifiedUser.id);
-    outputLines.push(
-      `Global  : ${(await getGlobalCountForUser(specifiedUser.id)).toLocaleString('en-US') + formatPlace(userGlobalPosition)}`
-    );
+    const userGlobalCount = await getGlobalCountForUser(specifiedUser.id);
+    outputLines.push(`Global  : ${userGlobalCount.toLocaleString('en-US') + formatPlace(userGlobalPosition, userGlobalCount)}`);
     if (commandInteraction.inGuild()) {
       // User (guild)
       const userGuildPosition = await getGlobalLeaderboardPositionForUser(specifiedUser.id);
-      outputLines.push(
-        `Guild   : ${
-          (await getGuildCountForUser(commandInteraction.guildId, specifiedUser.id)).toLocaleString('en-US') +
-          formatPlace(userGuildPosition)
-        }`
-      );
+      const userGuildCount = await getGuildCountForUser(commandInteraction.guildId, specifiedUser.id);
+      outputLines.push(`Guild   : ${userGuildCount.toLocaleString('en-US') + formatPlace(userGuildPosition, userGuildCount)}`);
       // User (channel)
       const userChannelPosition = await getChannelLeaderboardPositionForUser(
         commandInteraction.guildId,
         commandInteraction.channelId,
         specifiedUser.id
       );
-      outputLines.push(
-        `Channel : ${
-          (await getChannelCountForUser(commandInteraction.guildId, commandInteraction.channelId, specifiedUser.id)).toLocaleString(
-            'en-US'
-          ) + formatPlace(userChannelPosition)
-        }`
-      );
+      const userChannelCount = await getChannelCountForUser(commandInteraction.guildId, commandInteraction.channelId, specifiedUser.id);
+      outputLines.push(`Channel : ${userChannelCount.toLocaleString('en-US') + formatPlace(userChannelPosition, userChannelCount)}`);
     }
     outputLines.push('```');
     // Send back the generated stats
@@ -98,7 +87,8 @@ export class StatsCommand extends DiscordChatInputCommand {
   }
 }
 
-function formatPlace(place: number): string {
+function formatPlace(place: number, count: bigint): string {
+  if (count === BigInt(0)) return '';
   if (place === -1) return '';
   const medals = ['🥇', '🥈', '🥉'];
   return ` (#${place.toLocaleString('en-US')}${medals[place - 1] !== undefined ? ' ' + medals[place - 1] : ''})`;
