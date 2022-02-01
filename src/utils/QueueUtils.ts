@@ -24,10 +24,7 @@ type CachedUserQueueItem = {
 };
 
 // Counter queue
-function counterQueueItemProcess(
-  job: CounterQueueItem,
-  callback: QueueWorkerCallback
-) {
+function counterQueueItemProcess(job: CounterQueueItem, callback: QueueWorkerCallback) {
   prismaClient.usage
     .upsert({
       where: {
@@ -73,10 +70,7 @@ export function addToCounterQueue(counterQueueItem: CounterQueueItem) {
 }
 
 // Cached user queue
-function cachedUserQueueItemProcess(
-  job: CachedUserQueueItem,
-  callback: QueueWorkerCallback
-) {
+function cachedUserQueueItemProcess(job: CachedUserQueueItem, callback: QueueWorkerCallback) {
   prismaClient.cachedUser
     .upsert({
       where: {

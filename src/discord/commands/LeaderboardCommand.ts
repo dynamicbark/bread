@@ -1,9 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
-import {
-  getGuildUsersLeaderboard,
-  isEnabledChannel,
-} from '../../utils/DatabaseUtils';
+import { getGuildUsersLeaderboard, isEnabledChannel } from '../../utils/DatabaseUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
 export class LeaderboardCommand extends DiscordChatInputCommand {
@@ -49,15 +46,9 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
       // Guild users leaderboard
       outputLines.push('**Leaderboard** (Guild users)');
       outputLines.push('```');
-      const guildUsersLeaderboard = await getGuildUsersLeaderboard(
-        commandInteraction.guildId
-      );
+      const guildUsersLeaderboard = await getGuildUsersLeaderboard(commandInteraction.guildId);
       for (let i = 0; i < Math.min(10, guildUsersLeaderboard.length); i += 1) {
-        const discordTagCleaned = (
-          guildUsersLeaderboard[i].username +
-          '#' +
-          guildUsersLeaderboard[i].discriminator
-        ).replace(/\`/g, '');
+        const discordTagCleaned = (guildUsersLeaderboard[i].username + '#' + guildUsersLeaderboard[i].discriminator).replace(/\`/g, '');
         outputLines.push(
           formatLeaderboardPlace(guildUsersLeaderboard[i].place) +
             ' - ' +
@@ -70,10 +61,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
     }
     // Send back the generated leaderboard
     const isRunInEnabledChannel = commandInteraction.inGuild()
-      ? await isEnabledChannel(
-          commandInteraction.guildId,
-          commandInteraction.channelId
-        )
+      ? await isEnabledChannel(commandInteraction.guildId, commandInteraction.channelId)
       : false;
     commandInteraction.reply({
       content: outputLines.join('\n'),
@@ -85,7 +73,5 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
 function formatLeaderboardPlace(place: number): string {
   if (place === -1) return '';
   const medals = ['🥇', '🥈', '🥉'];
-  return `#${place.toLocaleString('en-US')}${
-    medals[place - 1] !== undefined ? ' ' + medals[place - 1] : ''
-  }`;
+  return `#${place.toLocaleString('en-US')}${medals[place - 1] !== undefined ? ' ' + medals[place - 1] : ''}`;
 }

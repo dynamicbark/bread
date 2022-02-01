@@ -34,29 +34,16 @@ export class StatsCommand extends DiscordChatInputCommand {
   async handle(commandInteraction: CommandInteraction): Promise<void> {
     const outputLines = ['**🍞 Stats**', '```', 'Overall:'];
     // Global (everywhere)
-    outputLines.push(
-      `Global  : ${(await getGlobalCount()).toLocaleString('en-US')}`
-    );
+    outputLines.push(`Global  : ${(await getGlobalCount()).toLocaleString('en-US')}`);
     if (commandInteraction.inGuild()) {
       // Global (current guild)
-      const globalGuildPosition = await getGlobalLeaderboardPositionForGuild(
-        commandInteraction.guildId
-      );
+      const globalGuildPosition = await getGlobalLeaderboardPositionForGuild(commandInteraction.guildId);
       outputLines.push(
-        `Guild   : ${
-          (
-            await getGlobalGuildCount(commandInteraction.guildId)
-          ).toLocaleString('en-US') + formatPlace(globalGuildPosition)
-        }`
+        `Guild   : ${(await getGlobalGuildCount(commandInteraction.guildId)).toLocaleString('en-US') + formatPlace(globalGuildPosition)}`
       );
       // Global (current channel)
       outputLines.push(
-        `Channel : ${(
-          await getGlobalChannelCount(
-            commandInteraction.guildId,
-            commandInteraction.channelId
-          )
-        ).toLocaleString('en-US')}`
+        `Channel : ${(await getGlobalChannelCount(commandInteraction.guildId, commandInteraction.channelId)).toLocaleString('en-US')}`
       );
     }
     // User stats
@@ -72,29 +59,17 @@ export class StatsCommand extends DiscordChatInputCommand {
     outputLines.push(`---`);
     outputLines.push(`${specifiedUser.tag.replace(/\^/g, '')}:`);
     // User (everywhere)
-    const userGlobalPosition = await getGlobalLeaderboardPositionForUser(
-      specifiedUser.id
-    );
+    const userGlobalPosition = await getGlobalLeaderboardPositionForUser(specifiedUser.id);
     outputLines.push(
-      `Global  : ${
-        (await getGlobalCountForUser(specifiedUser.id)).toLocaleString(
-          'en-US'
-        ) + formatPlace(userGlobalPosition)
-      }`
+      `Global  : ${(await getGlobalCountForUser(specifiedUser.id)).toLocaleString('en-US') + formatPlace(userGlobalPosition)}`
     );
     if (commandInteraction.inGuild()) {
       // User (guild)
-      const userGuildPosition = await getGlobalLeaderboardPositionForUser(
-        specifiedUser.id
-      );
+      const userGuildPosition = await getGlobalLeaderboardPositionForUser(specifiedUser.id);
       outputLines.push(
         `Guild   : ${
-          (
-            await getGuildCountForUser(
-              commandInteraction.guildId,
-              specifiedUser.id
-            )
-          ).toLocaleString('en-US') + formatPlace(userGuildPosition)
+          (await getGuildCountForUser(commandInteraction.guildId, specifiedUser.id)).toLocaleString('en-US') +
+          formatPlace(userGuildPosition)
         }`
       );
       // User (channel)
@@ -105,23 +80,16 @@ export class StatsCommand extends DiscordChatInputCommand {
       );
       outputLines.push(
         `Channel : ${
-          (
-            await getChannelCountForUser(
-              commandInteraction.guildId,
-              commandInteraction.channelId,
-              specifiedUser.id
-            )
-          ).toLocaleString('en-US') + formatPlace(userChannelPosition)
+          (await getChannelCountForUser(commandInteraction.guildId, commandInteraction.channelId, specifiedUser.id)).toLocaleString(
+            'en-US'
+          ) + formatPlace(userChannelPosition)
         }`
       );
     }
     outputLines.push('```');
     // Send back the generated stats
     const isRunInEnabledChannel = commandInteraction.inGuild()
-      ? await isEnabledChannel(
-          commandInteraction.guildId,
-          commandInteraction.channelId
-        )
+      ? await isEnabledChannel(commandInteraction.guildId, commandInteraction.channelId)
       : false;
     commandInteraction.reply({
       content: outputLines.join('\n'),
@@ -133,7 +101,5 @@ export class StatsCommand extends DiscordChatInputCommand {
 function formatPlace(place: number): string {
   if (place === -1) return '';
   const medals = ['🥇', '🥈', '🥉'];
-  return ` (#${place.toLocaleString('en-US')}${
-    medals[place - 1] !== undefined ? ' ' + medals[place - 1] : ''
-  })`;
+  return ` (#${place.toLocaleString('en-US')}${medals[place - 1] !== undefined ? ' ' + medals[place - 1] : ''})`;
 }

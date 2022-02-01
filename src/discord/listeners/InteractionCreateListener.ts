@@ -7,26 +7,17 @@ import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
 const globalChatInputCommandMap = new Map<string, DiscordChatInputCommand>();
 
-function registerGlobalChatInputCommand(
-  discordChatInputCommand: DiscordChatInputCommand
-): void {
-  globalChatInputCommandMap.set(
-    discordChatInputCommand.commandConfiguration.name,
-    discordChatInputCommand
-  );
+function registerGlobalChatInputCommand(discordChatInputCommand: DiscordChatInputCommand): void {
+  globalChatInputCommandMap.set(discordChatInputCommand.commandConfiguration.name, discordChatInputCommand);
 }
 
 registerGlobalChatInputCommand(new LeaderboardCommand());
 registerGlobalChatInputCommand(new StatsCommand());
 registerGlobalChatInputCommand(new ToggleBreadOnlyCommand());
 
-export async function interactionCreateListener(
-  interaction: Interaction
-): Promise<void> {
+export async function interactionCreateListener(interaction: Interaction): Promise<void> {
   if (interaction.isCommand()) {
-    const discordCommand = globalChatInputCommandMap.get(
-      interaction.commandName
-    );
+    const discordCommand = globalChatInputCommandMap.get(interaction.commandName);
     if (!discordCommand) {
       return interaction.reply({
         content: 'The command requested was not found.',

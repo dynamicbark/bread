@@ -4,9 +4,7 @@ import { CommandInteraction } from 'discord.js';
 export abstract class DiscordChatInputCommand {
   public readonly commandConfiguration: RESTPostAPIChatInputApplicationCommandsJSONBody;
 
-  constructor(
-    commandConfiguration: RESTPostAPIChatInputApplicationCommandsJSONBody
-  ) {
+  constructor(commandConfiguration: RESTPostAPIChatInputApplicationCommandsJSONBody) {
     this.commandConfiguration = commandConfiguration;
   }
 

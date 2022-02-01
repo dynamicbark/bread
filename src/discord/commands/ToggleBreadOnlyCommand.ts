@@ -8,8 +8,7 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
   constructor() {
     super({
       name: 'togglebreadonly',
-      description:
-        'Toggle if the current channel should be a bread only channel.',
+      description: 'Toggle if the current channel should be a bread only channel.',
     });
   }
 
@@ -22,15 +21,11 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
     }
     if (!commandInteraction.memberPermissions.has('MANAGE_GUILD')) {
       return commandInteraction.reply({
-        content:
-          'You need to have manage server permissions to toggle the bread only channel state.',
+        content: 'You need to have manage server permissions to toggle the bread only channel state.',
         ephemeral: true,
       });
     }
-    const isRunInEnabledChannel = await isEnabledChannel(
-      commandInteraction.guildId,
-      commandInteraction.channelId
-    );
+    const isRunInEnabledChannel = await isEnabledChannel(commandInteraction.guildId, commandInteraction.channelId);
     if (isRunInEnabledChannel) {
       await prismaClient.enabledChannel.delete({
         where: {
@@ -52,21 +47,11 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
         },
       });
       let additionalMessage = '';
-      if (
-        !commandInteraction.channel ||
-        !commandInteraction.guild?.me
-          ?.permissionsIn(commandInteraction.channel)
-          .has('MANAGE_MESSAGES')
-      ) {
+      if (!commandInteraction.channel || !commandInteraction.guild?.me?.permissionsIn(commandInteraction.channel).has('MANAGE_MESSAGES')) {
         additionalMessage = `Please give ${commandInteraction.client.user?.username} the manage messages permission, without this permission, it cannot delete non-bread messages.`;
       }
       return commandInteraction.reply({
-        content: [
-          'The current channel is now a bread only channel.',
-          additionalMessage,
-        ]
-          .join('\n')
-          .trim(),
+        content: ['The current channel is now a bread only channel.', additionalMessage].join('\n').trim(),
         ephemeral: false,
       });
     }

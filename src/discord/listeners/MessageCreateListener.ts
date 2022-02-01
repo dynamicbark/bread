@@ -1,10 +1,7 @@
 import { Message } from 'discord.js';
 import { isEnabledChannel } from '../../utils/DatabaseUtils';
 import { attemptDelete } from '../../utils/MessageUtils';
-import {
-  addToCachedUserQueue,
-  addToCounterQueue,
-} from '../../utils/QueueUtils';
+import { addToCachedUserQueue, addToCounterQueue } from '../../utils/QueueUtils';
 
 const legacyPrefix = '.:';
 const legacyMessageCommands = [
@@ -19,10 +16,7 @@ const legacyMessageCommands = [
 export async function messageCreateListener(message: Message): Promise<void> {
   if (!message.inGuild()) return; // Make sure the message is from a guild
   if (message.author.id === message.client.user?.id) return; // Ignore the message if it is from the bot
-  const isInEnabledChannel = await isEnabledChannel(
-    message.guildId,
-    message.channelId
-  );
+  const isInEnabledChannel = await isEnabledChannel(message.guildId, message.channelId);
   // Enabled channel checks
   if (isInEnabledChannel) {
     if (message.author.bot) return attemptDelete(message);

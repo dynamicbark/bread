@@ -1,10 +1,7 @@
 import { CachedUser } from '@prisma/client';
 import { prismaClient } from '../';
 
-export async function isEnabledChannel(
-  guildId: string,
-  channelId: string
-): Promise<boolean> {
+export async function isEnabledChannel(guildId: string, channelId: string): Promise<boolean> {
   const foundChannelCount = await prismaClient.enabledChannel.count({
     where: {
       guild_id: BigInt(guildId),
@@ -38,10 +35,7 @@ export async function getGlobalGuildCount(guildId: string): Promise<bigint> {
 }
 
 // Get the total number of usages for a specific channel in a guild
-export async function getGlobalChannelCount(
-  guildId: string,
-  channelId: string
-): Promise<bigint> {
+export async function getGlobalChannelCount(guildId: string, channelId: string): Promise<bigint> {
   const usageCountResponse = await prismaClient.usage.aggregate({
     _sum: {
       counter: true,
@@ -55,9 +49,7 @@ export async function getGlobalChannelCount(
 }
 
 // Get the global leaderboard position for a specific guild
-export async function getGlobalLeaderboardPositionForGuild(
-  guildId: string
-): Promise<number> {
+export async function getGlobalLeaderboardPositionForGuild(guildId: string): Promise<number> {
   const usageLeaderboardResponse = await prismaClient.usage.groupBy({
     by: ['guild_id'],
     _sum: {
@@ -91,9 +83,7 @@ export async function getGlobalCountForUser(userId: string): Promise<bigint> {
 }
 
 // Get the global leaderboard position for a specific user
-export async function getGlobalLeaderboardPositionForUser(
-  guildId: string
-): Promise<number> {
+export async function getGlobalLeaderboardPositionForUser(guildId: string): Promise<number> {
   const usageLeaderboardResponse = await prismaClient.usage.groupBy({
     by: ['user_id'],
     _sum: {
@@ -114,10 +104,7 @@ export async function getGlobalLeaderboardPositionForUser(
 }
 
 // Get the total number of usages for a specific user in a guild
-export async function getGuildCountForUser(
-  guildId: string,
-  userId: string
-): Promise<bigint> {
+export async function getGuildCountForUser(guildId: string, userId: string): Promise<bigint> {
   const usageCountResponse = await prismaClient.usage.aggregate({
     _sum: {
       counter: true,
@@ -131,10 +118,7 @@ export async function getGuildCountForUser(
 }
 
 // Get the leaderboard position for a specific user in a guild
-export async function getGuildLeaderboardPositionForUser(
-  guildId: string,
-  userId: string
-): Promise<number> {
+export async function getGuildLeaderboardPositionForUser(guildId: string, userId: string): Promise<number> {
   const usageLeaderboardResponse = await prismaClient.usage.groupBy({
     where: {
       guild_id: BigInt(guildId),
@@ -158,11 +142,7 @@ export async function getGuildLeaderboardPositionForUser(
 }
 
 // Get the total number of usages for a specific user in a channel
-export async function getChannelCountForUser(
-  guildId: string,
-  channelId: string,
-  userId: string
-): Promise<bigint> {
+export async function getChannelCountForUser(guildId: string, channelId: string, userId: string): Promise<bigint> {
   const usageCountResponse = await prismaClient.usage.aggregate({
     _sum: {
       counter: true,
@@ -177,11 +157,7 @@ export async function getChannelCountForUser(
 }
 
 // Get the leaderboard position for a specific user in a channel
-export async function getChannelLeaderboardPositionForUser(
-  guildId: string,
-  channelId: string,
-  userId: string
-): Promise<number> {
+export async function getChannelLeaderboardPositionForUser(guildId: string, channelId: string, userId: string): Promise<number> {
   const usageLeaderboardResponse = await prismaClient.usage.groupBy({
     where: {
       guild_id: BigInt(guildId),
@@ -213,9 +189,7 @@ export type GuildUserLeaderboardItem = {
 };
 
 // Get guild leaderboard
-export async function getGuildUsersLeaderboard(
-  guildId: string
-): Promise<GuildUserLeaderboardItem[]> {
+export async function getGuildUsersLeaderboard(guildId: string): Promise<GuildUserLeaderboardItem[]> {
   const usageLeaderboardResponse = await prismaClient.usage.groupBy({
     where: {
       guild_id: BigInt(guildId),
