@@ -6,7 +6,7 @@ import {
   addToCounterQueue,
 } from '../../utils/QueueUtils';
 
-const legacyPrefix = '..:';
+const legacyPrefix = '.:';
 const legacyMessageCommands = [
   `${legacyPrefix}help`,
   `${legacyPrefix}invite`,
