@@ -11,6 +11,7 @@
   "private": true,
   "devDependencies": {
     "@types/node": "^17.0.13",
+    "@types/random-seed": "^0.3.3",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
     "@typescript-eslint/parser": "^5.10.2",
     "discord-api-types": "^0.26.1",
@@ -22,7 +23,9 @@
     "@prisma/client": "^3.8.1",
     "discord.js": "^13.6.0",
     "dotenv": "^15.0.0",
-    "queue": "^6.0.2"
+    "queue": "^6.0.2",
+    "random-seed": "^0.3.0",
+    "unique-names-generator": "^4.6.0"
   },
   "packageManager": "yarn@3.1.1"
 }
