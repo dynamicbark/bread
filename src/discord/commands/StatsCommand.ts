@@ -10,6 +10,7 @@ import {
   getGlobalLeaderboardPositionForGuild,
   getGlobalLeaderboardPositionForUser,
   getGuildCountForUser,
+  getGuildLeaderboardPositionForUser,
   isEnabledChannel,
 } from '../../utils/DatabaseUtils';
 import { addToCachedUserQueue } from '../../utils/QueueUtils';
@@ -63,7 +64,7 @@ export class StatsCommand extends DiscordChatInputCommand {
     outputLines.push(`Global  : ${userGlobalCount.toLocaleString('en-US') + formatPlace(userGlobalPosition, userGlobalCount)}`);
     if (commandInteraction.inGuild()) {
       // User (guild)
-      const userGuildPosition = await getGlobalLeaderboardPositionForUser(specifiedUser.id);
+      const userGuildPosition = await getGuildLeaderboardPositionForUser(commandInteraction.guildId, specifiedUser.id);
       const userGuildCount = await getGuildCountForUser(commandInteraction.guildId, specifiedUser.id);
       outputLines.push(`Guild   : ${userGuildCount.toLocaleString('en-US') + formatPlace(userGuildPosition, userGuildCount)}`);
       // User (channel)
