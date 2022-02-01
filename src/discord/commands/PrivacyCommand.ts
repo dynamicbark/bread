@@ -69,7 +69,7 @@ export class PrivacyCommand extends DiscordChatInputCommand {
     } else if (subcommandUsed === 'toggle') {
       // Toggle the privacy state
       const newPrivacyEnabledState = !user?.privacy_enabled;
-      prismaClient.user.update({
+      await prismaClient.user.update({
         where: {
           id: user?.id,
         },
@@ -78,7 +78,7 @@ export class PrivacyCommand extends DiscordChatInputCommand {
         },
       });
       return commandInteraction.reply({
-        content: `Your privacy mode has been \`${newPrivacyEnabledState ? 'enabled' : 'disabled'}\`.`,
+        content: `Your privacy mode has been \`${newPrivacyEnabledState === true ? 'enabled' : 'disabled'}\`.`,
         ephemeral: true,
       });
     }
