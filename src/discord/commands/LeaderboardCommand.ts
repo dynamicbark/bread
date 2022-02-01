@@ -50,7 +50,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
       for (let i = 0; i < Math.min(10, guildUsersLeaderboard.length); i += 1) {
         const discordTagCleaned = (guildUsersLeaderboard[i].username + '#' + guildUsersLeaderboard[i].discriminator).replace(/\`/g, '');
         outputLines.push(
-          formatLeaderboardPlace(guildUsersLeaderboard[i].place).padEnd(4, ' ') +
+          formatLeaderboardPlace(guildUsersLeaderboard[i].place).padEnd(5, ' ') +
             ' - ' +
             guildUsersLeaderboard[i].count.toLocaleString('en-US') +
             ' - ' +
