@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usage {
+  guild_id    BigInt
+  channel_id  BigInt
+  user_id     BigInt
+  cached_user CachedUser @relation(fields: [user_id], references: [id])
+  counter     BigInt     @default(0)
+
+  @@unique([guild_id, channel_id, user_id])
+}
+
+model EnabledChannel {
+  guild_id   BigInt
+  channel_id BigInt
+
+  @@unique([guild_id, channel_id])
+}
+
+model CachedUser {
+  id            BigInt  @unique
+  username      String
+  discriminator String
+  last_update   BigInt
+  usages        Usage[]
+}
