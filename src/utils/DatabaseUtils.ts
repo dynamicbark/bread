@@ -181,15 +181,44 @@ export async function getChannelLeaderboardPositionForUser(guildId: string, chan
   return -1;
 }
 
-export type GuildUserLeaderboardItem = {
+export type UserLeaderboardItem = {
+  user_id: string;
   username: string;
   discriminator: string;
   count: bigint;
   place: number;
 };
 
-// Get guild leaderboard
-export async function getGuildUsersLeaderboard(guildId: string): Promise<GuildUserLeaderboardItem[]> {
+// Get global users leaderboard
+export async function getGlobalUsersLeaderboard(guildId: string): Promise<UserLeaderboardItem[]> {
+  const usageLeaderboardResponse = await prismaClient.usage.groupBy({
+    by: ['user_id'],
+    _sum: {
+      counter: true,
+    },
+    orderBy: {
+      _sum: {
+        counter: 'desc',
+      },
+    },
+    take: 10,
+  });
+  const leaderboardItems: UserLeaderboardItem[] = [];
+  for (let i = 0; i < usageLeaderboardResponse.length; i += 1) {
+    const cachedUser = await getCachedUser(usageLeaderboardResponse[i].user_id);
+    leaderboardItems.push({
+      user_id: cachedUser !== null ? String(cachedUser.id) : '0',
+      username: cachedUser !== null ? cachedUser.username : 'Unknown User',
+      discriminator: cachedUser !== null ? cachedUser.discriminator : '0000',
+      count: usageLeaderboardResponse[i]._sum.counter || BigInt(0),
+      place: i + 1,
+    });
+  }
+  return leaderboardItems;
+}
+
+// Get guild users leaderboard
+export async function getGuildUsersLeaderboard(guildId: string): Promise<UserLeaderboardItem[]> {
   const usageLeaderboardResponse = await prismaClient.usage.groupBy({
     where: {
       guild_id: BigInt(guildId),
@@ -205,10 +234,11 @@ export async function getGuildUsersLeaderboard(guildId: string): Promise<GuildUs
     },
     take: 10,
   });
-  const leaderboardItems: GuildUserLeaderboardItem[] = [];
+  const leaderboardItems: UserLeaderboardItem[] = [];
   for (let i = 0; i < usageLeaderboardResponse.length; i += 1) {
     const cachedUser = await getCachedUser(usageLeaderboardResponse[i].user_id);
     leaderboardItems.push({
+      user_id: cachedUser !== null ? String(cachedUser.id) : '0',
       username: cachedUser !== null ? cachedUser.username : 'Unknown User',
       discriminator: cachedUser !== null ? cachedUser.discriminator : '0000',
       count: usageLeaderboardResponse[i]._sum.counter || BigInt(0),

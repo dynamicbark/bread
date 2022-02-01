@@ -118,6 +118,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/random-seed@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@types/random-seed@npm:0.3.3"
+  checksum: de0f4ce70d47af68424b9bfdb27fd07e2be31cbbafee1ef7f4e661b94576b2cf6a2f1f479697d5b79186bf70bad0988485a7d2ce76084fe7c0544d32b2ec0a67
+  languageName: node
+  linkType: hard
+
 "@types/ws@npm:^8.2.2":
   version: 8.2.2
   resolution: "@types/ws@npm:8.2.2"
@@ -273,6 +280,7 @@ __metadata:
   dependencies:
     "@prisma/client": ^3.8.1
     "@types/node": ^17.0.13
+    "@types/random-seed": ^0.3.3
     "@typescript-eslint/eslint-plugin": ^5.10.2
     "@typescript-eslint/parser": ^5.10.2
     discord-api-types: ^0.26.1
@@ -281,7 +289,9 @@ __metadata:
     prettier: ^2.5.1
     prisma: ^3.8.1
     queue: ^6.0.2
+    random-seed: ^0.3.0
     typescript: ^4.5.5
+    unique-names-generator: ^4.6.0
   languageName: unknown
   linkType: soft
 
@@ -531,6 +541,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-stringify-safe@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "json-stringify-safe@npm:5.0.1"
+  checksum: 48ec0adad5280b8a96bb93f4563aa1667fd7a36334f79149abd42446d0989f2ddc58274b479f4819f1f00617957e6344c886c55d05a4e15ebb4ab931e4a6a8ee
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^6.0.0":
   version: 6.0.0
   resolution: "lru-cache@npm:6.0.0"
@@ -645,6 +662,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"random-seed@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "random-seed@npm:0.3.0"
+  dependencies:
+    json-stringify-safe: ^5.0.1
+  checksum: 0a82692fc8d830bc26259dad78a911969343c247afb4be5d578c30fd9fbe76c7ce3f6900422310fc90fe05d6baa12e84a1b9ff93b0b7fda757ecfa40645a1f72
+  languageName: node
+  linkType: hard
+
 "regexpp@npm:^3.2.0":
   version: 3.2.0
   resolution: "regexpp@npm:3.2.0"
@@ -751,6 +777,13 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: c05c318d79c690f101d7ffb34cd6c7d6bbd884d3af9cefe7749ad0cd6be43c7082f098280982ca945dcba23fde34a08fed9602bb26540936baf8c0520727d3ba
+  languageName: node
+  linkType: hard
+
+"unique-names-generator@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "unique-names-generator@npm:4.6.0"
+  checksum: c28968845a0ee5fc607c079788efc0e6cb0e8526d6d60c9ffb9ac51404a147eb9f94201280f2ded0896a1e402e1fd802b40ffa0f94de7c617784cd7ae4b6386c
   languageName: node
   linkType: hard
 

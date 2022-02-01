@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
-import { getGuildUsersLeaderboard, isEnabledChannel } from '../../utils/DatabaseUtils';
+import { getGlobalUsersLeaderboard, getGuildUsersLeaderboard, isEnabledChannel, UserLeaderboardItem } from '../../utils/DatabaseUtils';
+import { generateName } from '../../utils/UsernameUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
 export class LeaderboardCommand extends DiscordChatInputCommand {
@@ -19,6 +20,10 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
               name: 'Guild Users',
               value: 'guild/users',
             },
+            {
+              name: 'Global Users',
+              value: 'global/users',
+            },
           ],
         },
       ],
@@ -36,7 +41,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
     let mode = commandInteraction.options.getString('mode', false);
     if (mode === null) mode = 'guild/users';
     // Check to see if a valid mode is specified
-    if (!['guild/users'].includes(mode)) {
+    if (!['guild/users', 'global/users'].includes(mode)) {
       return commandInteraction.reply({
         content: 'The mode specified is not valid.',
         ephemeral: true,
@@ -47,16 +52,18 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
       outputLines.push('**Leaderboard** (Guild users)');
       outputLines.push('```');
       const guildUsersLeaderboard = await getGuildUsersLeaderboard(commandInteraction.guildId);
-      for (let i = 0; i < Math.min(10, guildUsersLeaderboard.length); i += 1) {
-        const discordTagCleaned = (guildUsersLeaderboard[i].username + '#' + guildUsersLeaderboard[i].discriminator).replace(/\`/g, '');
-        outputLines.push(
-          formatLeaderboardPlace(guildUsersLeaderboard[i].place).padEnd(5, ' ') +
-            ' - ' +
-            guildUsersLeaderboard[i].count.toLocaleString('en-US') +
-            ' - ' +
-            discordTagCleaned
-        );
-      }
+      outputLines.push(...formatUsersLeaderboard(guildUsersLeaderboard, commandInteraction.user.id));
+      outputLines.push('```');
+    } else if (mode === 'global/users') {
+      // Global users leaderboard
+      outputLines.push('**Leaderboard** (Global users)');
+      outputLines.push('```');
+      const globalUsersLeaderboard = await getGlobalUsersLeaderboard(commandInteraction.guildId);
+      outputLines.push(
+        ...formatUsersLeaderboard(globalUsersLeaderboard, commandInteraction.user.id, {
+          hideOtherNames: true,
+        })
+      );
       outputLines.push('```');
     }
     // Send back the generated leaderboard
@@ -68,6 +75,39 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
       ephemeral: isRunInEnabledChannel,
     });
   }
+}
+
+function formatUsersLeaderboard(
+  usersLeaderboard: UserLeaderboardItem[],
+  requestUserId: string,
+  options?: {
+    hideOtherNames?: boolean;
+  }
+): string[] {
+  const hideOtherNames = options?.hideOtherNames || false;
+  const outputLines = [];
+  for (let i = 0; i < Math.min(10, usersLeaderboard.length); i += 1) {
+    const discordTag = formatUserTag(
+      hideOtherNames ? requestUserId !== usersLeaderboard[i].user_id : false,
+      usersLeaderboard[i].user_id,
+      usersLeaderboard[i].username,
+      usersLeaderboard[i].discriminator
+    );
+    outputLines.push(
+      formatLeaderboardPlace(usersLeaderboard[i].place).padEnd(5, ' ') +
+        ' - ' +
+        usersLeaderboard[i].count.toLocaleString('en-US') +
+        ' - ' +
+        discordTag +
+        (requestUserId === usersLeaderboard[i].user_id ? ' (You)' : '')
+    );
+  }
+  return outputLines;
+}
+
+function formatUserTag(anonymizeTag: boolean, otherUserId: string, username: string, discriminator: string): string {
+  if (!anonymizeTag) return (username + '#' + discriminator).replace(/\`/g, '');
+  return generateName(otherUserId + ':' + username + '#' + discriminator).replace(/\`/g, '');
 }
 
 function formatLeaderboardPlace(place: number): string {
