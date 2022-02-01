@@ -1,4 +1,3 @@
-import { ApplicationCommandOptionType } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
 import { prismaClient } from '../..';
 import { isEnabledChannel } from '../../utils/DatabaseUtils';

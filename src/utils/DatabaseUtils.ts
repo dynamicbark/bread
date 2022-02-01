@@ -1,4 +1,4 @@
-import { CachedUser } from '@prisma/client';
+import { User } from '@prisma/client';
 import { prismaClient } from '../';
 
 export async function isEnabledChannel(guildId: string, channelId: string): Promise<boolean> {
@@ -182,9 +182,7 @@ export async function getChannelLeaderboardPositionForUser(guildId: string, chan
 }
 
 export type UserLeaderboardItem = {
-  user_id: string;
-  username: string;
-  discriminator: string;
+  user_id: bigint;
   count: bigint;
   place: number;
 };
@@ -205,11 +203,9 @@ export async function getGlobalUsersLeaderboard(guildId: string): Promise<UserLe
   });
   const leaderboardItems: UserLeaderboardItem[] = [];
   for (let i = 0; i < usageLeaderboardResponse.length; i += 1) {
-    const cachedUser = await getCachedUser(usageLeaderboardResponse[i].user_id);
+    const user = await getUser(usageLeaderboardResponse[i].user_id);
     leaderboardItems.push({
-      user_id: cachedUser !== null ? String(cachedUser.id) : '0',
-      username: cachedUser !== null ? cachedUser.username : 'Unknown User',
-      discriminator: cachedUser !== null ? cachedUser.discriminator : '0000',
+      user_id: user !== null ? user.id : BigInt(0),
       count: usageLeaderboardResponse[i]._sum.counter || BigInt(0),
       place: i + 1,
     });
@@ -236,11 +232,9 @@ export async function getGuildUsersLeaderboard(guildId: string): Promise<UserLea
   });
   const leaderboardItems: UserLeaderboardItem[] = [];
   for (let i = 0; i < usageLeaderboardResponse.length; i += 1) {
-    const cachedUser = await getCachedUser(usageLeaderboardResponse[i].user_id);
+    const user = await getUser(usageLeaderboardResponse[i].user_id);
     leaderboardItems.push({
-      user_id: cachedUser !== null ? String(cachedUser.id) : '0',
-      username: cachedUser !== null ? cachedUser.username : 'Unknown User',
-      discriminator: cachedUser !== null ? cachedUser.discriminator : '0000',
+      user_id: user !== null ? user.id : BigInt(0),
       count: usageLeaderboardResponse[i]._sum.counter || BigInt(0),
       place: i + 1,
     });
@@ -248,8 +242,8 @@ export async function getGuildUsersLeaderboard(guildId: string): Promise<UserLea
   return leaderboardItems;
 }
 
-async function getCachedUser(userId: bigint): Promise<CachedUser | null> {
-  return prismaClient.cachedUser.findUnique({
+export async function getUser(userId: bigint): Promise<User | null> {
+  return prismaClient.user.findUnique({
     where: {
       id: userId,
     },

@@ -13,7 +13,7 @@ import {
   getGuildLeaderboardPositionForUser,
   isEnabledChannel,
 } from '../../utils/DatabaseUtils';
-import { addToCachedUserQueue } from '../../utils/QueueUtils';
+import { addToUserQueue } from '../../utils/QueueUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
 export class StatsCommand extends DiscordChatInputCommand {
@@ -51,7 +51,7 @@ export class StatsCommand extends DiscordChatInputCommand {
     if (specifiedUser === null) {
       specifiedUser = commandInteraction.user;
     }
-    addToCachedUserQueue({
+    addToUserQueue({
       userId: specifiedUser.id,
       username: specifiedUser.username,
       discriminator: specifiedUser.discriminator,

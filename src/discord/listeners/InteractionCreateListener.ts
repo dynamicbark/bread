@@ -1,6 +1,7 @@
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types';
 import { Client, Interaction } from 'discord.js';
 import { LeaderboardCommand } from '../commands/LeaderboardCommand';
+import { PrivacyCommand } from '../commands/PrivacyCommand';
 import { StatsCommand } from '../commands/StatsCommand';
 import { ToggleBreadOnlyCommand } from '../commands/ToggleBreadOnlyCommand';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
@@ -12,6 +13,7 @@ function registerGlobalChatInputCommand(discordChatInputCommand: DiscordChatInpu
 }
 
 registerGlobalChatInputCommand(new LeaderboardCommand());
+registerGlobalChatInputCommand(new PrivacyCommand());
 registerGlobalChatInputCommand(new StatsCommand());
 registerGlobalChatInputCommand(new ToggleBreadOnlyCommand());
 

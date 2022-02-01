@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import { isEnabledChannel } from '../../utils/DatabaseUtils';
 import { attemptDelete } from '../../utils/MessageUtils';
-import { addToCachedUserQueue, addToCounterQueue } from '../../utils/QueueUtils';
+import { addToUserQueue, addToCounterQueue } from '../../utils/QueueUtils';
 
 const legacyPrefix = '.:';
 const legacyMessageCommands = [
@@ -29,7 +29,7 @@ export async function messageCreateListener(message: Message): Promise<void> {
       channelId: message.channelId,
       userId: message.author.id,
     });
-    addToCachedUserQueue({
+    addToUserQueue({
       userId: message.author.id,
       username: message.author.username,
       discriminator: message.author.discriminator,

@@ -1,7 +1,13 @@
 import { ApplicationCommandOptionType } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
-import { getGlobalUsersLeaderboard, getGuildUsersLeaderboard, isEnabledChannel, UserLeaderboardItem } from '../../utils/DatabaseUtils';
-import { generateName } from '../../utils/UsernameUtils';
+import {
+  getGlobalUsersLeaderboard,
+  getGuildUsersLeaderboard,
+  getUser,
+  isEnabledChannel,
+  UserLeaderboardItem,
+} from '../../utils/DatabaseUtils';
+import { generateName, getPrivateNameForUser } from '../../utils/UsernameUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
 export class LeaderboardCommand extends DiscordChatInputCommand {
@@ -52,18 +58,18 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
       outputLines.push('**Leaderboard** (Guild users)');
       outputLines.push('```');
       const guildUsersLeaderboard = await getGuildUsersLeaderboard(commandInteraction.guildId);
-      outputLines.push(...formatUsersLeaderboard(guildUsersLeaderboard, commandInteraction.user.id));
+      const formattedLeaderboardLines = await formatUsersLeaderboard(guildUsersLeaderboard, BigInt(commandInteraction.user.id));
+      outputLines.push(...(formattedLeaderboardLines.length === 0 ? ['No data.'] : formattedLeaderboardLines));
       outputLines.push('```');
     } else if (mode === 'global/users') {
       // Global users leaderboard
       outputLines.push('**Leaderboard** (Global users)');
       outputLines.push('```');
       const globalUsersLeaderboard = await getGlobalUsersLeaderboard(commandInteraction.guildId);
-      outputLines.push(
-        ...formatUsersLeaderboard(globalUsersLeaderboard, commandInteraction.user.id, {
-          hideOtherNames: true,
-        })
-      );
+      const formattedLeaderboardLines = await formatUsersLeaderboard(globalUsersLeaderboard, BigInt(commandInteraction.user.id), {
+        hideOtherNames: true,
+      });
+      outputLines.push(...(formattedLeaderboardLines.length === 0 ? ['No data.'] : formattedLeaderboardLines));
       outputLines.push('```');
     }
     // Send back the generated leaderboard
@@ -77,37 +83,38 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
   }
 }
 
-function formatUsersLeaderboard(
+async function formatUsersLeaderboard(
   usersLeaderboard: UserLeaderboardItem[],
-  requestUserId: string,
+  requestUserId: bigint,
   options?: {
     hideOtherNames?: boolean;
   }
-): string[] {
+): Promise<string[]> {
   const hideOtherNames = options?.hideOtherNames || false;
   const outputLines = [];
   for (let i = 0; i < Math.min(10, usersLeaderboard.length); i += 1) {
-    const discordTag = formatUserTag(
-      hideOtherNames ? requestUserId !== usersLeaderboard[i].user_id : false,
-      usersLeaderboard[i].user_id,
-      usersLeaderboard[i].username,
-      usersLeaderboard[i].discriminator
-    );
+    const shouldHideName = hideOtherNames ? requestUserId !== usersLeaderboard[i].user_id : false;
+    const user = await getUser(usersLeaderboard[i].user_id);
+    if (user === null) continue;
+    let hiddenName = user.private_name;
+    if (shouldHideName && hiddenName === null) {
+      hiddenName = await getPrivateNameForUser(user.id);
+    }
+    const displayName = cleanDisplayName(shouldHideName && user.privacy_enabled ? hiddenName! : `${user.username}#${user.discriminator}`);
     outputLines.push(
       formatLeaderboardPlace(usersLeaderboard[i].place).padEnd(5, ' ') +
         ' - ' +
         usersLeaderboard[i].count.toLocaleString('en-US') +
         ' - ' +
-        discordTag +
+        displayName +
         (requestUserId === usersLeaderboard[i].user_id ? ' (You)' : '')
     );
   }
   return outputLines;
 }
 
-function formatUserTag(anonymizeTag: boolean, otherUserId: string, username: string, discriminator: string): string {
-  if (!anonymizeTag) return (username + '#' + discriminator).replace(/\`/g, '');
-  return generateName(otherUserId + ':' + username + '#' + discriminator).replace(/\`/g, '');
+function cleanDisplayName(displayName: string): string {
+  return displayName.replace(/\`/g, '');
 }
 
 function formatLeaderboardPlace(place: number): string {

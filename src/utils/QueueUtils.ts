@@ -6,7 +6,7 @@ const counterQueue = new Queue({
   autostart: true,
 });
 
-const cachedUserQueue = new Queue({
+const userQueue = new Queue({
   concurrency: 1,
   autostart: true,
 });
@@ -17,7 +17,7 @@ type CounterQueueItem = {
   userId: string;
 };
 
-type CachedUserQueueItem = {
+type UserQueueItem = {
   userId: string;
   username: string;
   discriminator: string;
@@ -38,7 +38,7 @@ function counterQueueItemProcess(job: CounterQueueItem, callback: QueueWorkerCal
         guild_id: BigInt(job.guildId),
         channel_id: BigInt(job.channelId),
         counter: 1,
-        cached_user: {
+        user: {
           connectOrCreate: {
             where: {
               id: BigInt(job.userId),
@@ -69,9 +69,9 @@ export function addToCounterQueue(counterQueueItem: CounterQueueItem) {
   });
 }
 
-// Cached user queue
-function cachedUserQueueItemProcess(job: CachedUserQueueItem, callback: QueueWorkerCallback) {
-  prismaClient.cachedUser
+// User queue
+export function userQueueItemProcess(job: UserQueueItem, callback: QueueWorkerCallback) {
+  prismaClient.user
     .upsert({
       where: {
         id: BigInt(job.userId),
@@ -93,8 +93,8 @@ function cachedUserQueueItemProcess(job: CachedUserQueueItem, callback: QueueWor
     });
 }
 
-export function addToCachedUserQueue(cachedUserQueueItem: CachedUserQueueItem) {
-  cachedUserQueue.push((callback) => {
-    cachedUserQueueItemProcess(cachedUserQueueItem, callback!);
+export function addToUserQueue(userQueueItem: UserQueueItem) {
+  userQueue.push((callback) => {
+    userQueueItemProcess(userQueueItem, callback!);
   });
 }
