@@ -1,6 +1,6 @@
 import { Message, PartialMessage } from 'discord.js';
 import { isEnabledChannel } from '../../utils/DatabaseUtils';
-import { attemptDelete } from '../../utils/MessageUtils';
+import { attemptMessageDelete } from '../../utils/DiscordUtils';
 
 export async function messageUpdateListener(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {
   if (!newMessage.inGuild()) return; // Make sure the message is from a guild
@@ -9,7 +9,7 @@ export async function messageUpdateListener(oldMessage: Message | PartialMessage
   const isInEnabledChannel = await isEnabledChannel(newMessage.guildId, channelId);
   // Enabled channel checks
   if (isInEnabledChannel) {
-    if (newMessage.author.bot) return attemptDelete(newMessage);
-    if (newMessage.content !== '🍞') return attemptDelete(newMessage);
+    if (newMessage.author.bot) return attemptMessageDelete(newMessage);
+    if (newMessage.content !== '🍞') return attemptMessageDelete(newMessage);
   }
 }

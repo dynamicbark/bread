@@ -13,6 +13,7 @@ import {
   getGuildLeaderboardPositionForUser,
   isEnabledChannel,
 } from '../../utils/DatabaseUtils';
+import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils';
 import { addToUserQueue } from '../../utils/QueueUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
@@ -33,6 +34,7 @@ export class StatsCommand extends DiscordChatInputCommand {
   }
 
   async handle(commandInteraction: CommandInteraction): Promise<void> {
+    const currentChannelId = getCurrentCommandInteractionChannelId(commandInteraction);
     const outputLines = ['**🍞 Stats**', '```', 'Overall:'];
     // Global (everywhere)
     outputLines.push(`Global  : ${(await getGlobalCount()).toLocaleString('en-US')}`);
@@ -42,9 +44,7 @@ export class StatsCommand extends DiscordChatInputCommand {
       const globalGuildCount = await getGlobalGuildCount(commandInteraction.guildId);
       outputLines.push(`Guild   : ${globalGuildCount.toLocaleString('en-US') + formatPlace(globalGuildPosition, globalGuildCount)}`);
       // Global (current channel)
-      outputLines.push(
-        `Channel : ${(await getGlobalChannelCount(commandInteraction.guildId, commandInteraction.channelId)).toLocaleString('en-US')}`
-      );
+      outputLines.push(`Channel : ${(await getGlobalChannelCount(commandInteraction.guildId, currentChannelId)).toLocaleString('en-US')}`);
     }
     // User stats
     let specifiedUser = commandInteraction.options.getUser('user', false);
@@ -70,16 +70,16 @@ export class StatsCommand extends DiscordChatInputCommand {
       // User (channel)
       const userChannelPosition = await getChannelLeaderboardPositionForUser(
         commandInteraction.guildId,
-        commandInteraction.channelId,
+        currentChannelId,
         specifiedUser.id
       );
-      const userChannelCount = await getChannelCountForUser(commandInteraction.guildId, commandInteraction.channelId, specifiedUser.id);
+      const userChannelCount = await getChannelCountForUser(commandInteraction.guildId, currentChannelId, specifiedUser.id);
       outputLines.push(`Channel : ${userChannelCount.toLocaleString('en-US') + formatPlace(userChannelPosition, userChannelCount)}`);
     }
     outputLines.push('```');
     // Send back the generated stats
     const isRunInEnabledChannel = commandInteraction.inGuild()
-      ? await isEnabledChannel(commandInteraction.guildId, commandInteraction.channelId)
+      ? await isEnabledChannel(commandInteraction.guildId, currentChannelId)
       : false;
     commandInteraction.reply({
       content: outputLines.join('\n'),

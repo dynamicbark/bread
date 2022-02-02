@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { isEnabledChannel } from '../../utils/DatabaseUtils';
-import { attemptDelete } from '../../utils/MessageUtils';
+import { attemptMessageDelete } from '../../utils/DiscordUtils';
 import { addToUserQueue, addToCounterQueue } from '../../utils/QueueUtils';
 
 const legacyPrefix = '.:';
@@ -21,8 +21,8 @@ export async function messageCreateListener(message: Message): Promise<void> {
   const isInEnabledChannel = await isEnabledChannel(message.guildId, channelId);
   // Enabled channel checks
   if (isInEnabledChannel) {
-    if (message.author.bot) return attemptDelete(message);
-    if (message.content !== '🍞') return attemptDelete(message);
+    if (message.author.bot) return attemptMessageDelete(message);
+    if (message.content !== '🍞') return attemptMessageDelete(message);
   }
   if (message.author.bot) return; // Ignore bots
   if (message.content.includes('🍞')) {

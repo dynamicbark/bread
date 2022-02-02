@@ -1,6 +1,7 @@
 import { CommandInteraction } from 'discord.js';
 import { prismaClient } from '../..';
 import { isEnabledChannel } from '../../utils/DatabaseUtils';
+import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
 export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
@@ -12,6 +13,7 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
   }
 
   async handle(commandInteraction: CommandInteraction): Promise<void> {
+    const currentChannelId = getCurrentCommandInteractionChannelId(commandInteraction);
     if (!commandInteraction.inGuild()) {
       return commandInteraction.reply({
         content: 'This command must be used in a guild.',
@@ -30,13 +32,13 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
         ephemeral: true,
       });
     }
-    const isRunInEnabledChannel = await isEnabledChannel(commandInteraction.guildId, commandInteraction.channelId);
+    const isRunInEnabledChannel = await isEnabledChannel(commandInteraction.guildId, currentChannelId);
     if (isRunInEnabledChannel) {
       await prismaClient.enabledChannel.delete({
         where: {
           guild_id_channel_id: {
             guild_id: BigInt(commandInteraction.guildId),
-            channel_id: BigInt(commandInteraction.channelId),
+            channel_id: BigInt(currentChannelId),
           },
         },
       });
@@ -48,11 +50,11 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
       await prismaClient.enabledChannel.create({
         data: {
           guild_id: BigInt(commandInteraction.guildId),
-          channel_id: BigInt(commandInteraction.channelId),
+          channel_id: BigInt(currentChannelId),
         },
       });
       let additionalMessage = '';
-      if (!commandInteraction.channel || !commandInteraction.guild?.me?.permissionsIn(commandInteraction.channel).has('MANAGE_MESSAGES')) {
+      if (!commandInteraction.channel || !commandInteraction.guild?.me?.permissionsIn(currentChannelId).has('MANAGE_MESSAGES')) {
         additionalMessage = `Please give ${commandInteraction.client.user?.username} the manage messages permission, without this permission, it cannot delete non-bread messages.`;
       }
       return commandInteraction.reply({

@@ -7,6 +7,7 @@ import {
   isEnabledChannel,
   UserLeaderboardItem,
 } from '../../utils/DatabaseUtils';
+import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils';
 import { generateName, getPrivateNameForUser } from '../../utils/UsernameUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
@@ -37,6 +38,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
   }
 
   async handle(commandInteraction: CommandInteraction): Promise<void> {
+    const currentChannelId = getCurrentCommandInteractionChannelId(commandInteraction);
     if (!commandInteraction.inGuild()) {
       return commandInteraction.reply({
         content: 'This command must be used in a guild.',
@@ -74,7 +76,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
     }
     // Send back the generated leaderboard
     const isRunInEnabledChannel = commandInteraction.inGuild()
-      ? await isEnabledChannel(commandInteraction.guildId, commandInteraction.channelId)
+      ? await isEnabledChannel(commandInteraction.guildId, currentChannelId)
       : false;
     commandInteraction.reply({
       content: outputLines.join('\n'),
