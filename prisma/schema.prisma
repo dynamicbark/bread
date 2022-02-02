@@ -18,8 +18,9 @@ model Usage {
 }
 
 model EnabledChannel {
-  guild_id   BigInt
-  channel_id BigInt
+  guild_id            BigInt
+  channel_id          BigInt
+  allow_custom_emojis Boolean @default(false)
 
   @@unique([guild_id, channel_id])
 }

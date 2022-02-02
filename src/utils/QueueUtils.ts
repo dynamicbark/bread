@@ -85,9 +85,6 @@ export function userQueueItemProcess(job: UserQueueItem, callback: QueueWorkerCa
     })
     .then(() => {
       callback();
-    })
-    .catch((e) => {
-      console.log('User upsert failed: ', e);
     });
 }
 

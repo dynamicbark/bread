@@ -1,9 +1,12 @@
 /dist
 /node_modules
 /.env*
+/data*
 
 # Don't ignore the example .env
 !/.env.example
+# Don't ignore the example data
+!/data-example*
 
 # Yarn
 .pnp.*

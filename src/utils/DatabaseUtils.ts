@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { EnabledChannel, User } from '@prisma/client';
 import { prismaClient } from '../';
 
 export async function isEnabledChannel(guildId: string, channelId: string): Promise<boolean> {
@@ -9,6 +9,16 @@ export async function isEnabledChannel(guildId: string, channelId: string): Prom
     },
   });
   return foundChannelCount != 0;
+}
+
+export async function getEnabledChannel(guildId: string, channelId: string): Promise<EnabledChannel | null> {
+  const foundChannel = await prismaClient.enabledChannel.findFirst({
+    where: {
+      guild_id: BigInt(guildId),
+      channel_id: BigInt(channelId),
+    },
+  });
+  return foundChannel;
 }
 
 // Get the total number of usages

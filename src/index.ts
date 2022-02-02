@@ -5,6 +5,7 @@ import { messageCreateListener } from './discord/listeners/MessageCreateListener
 import { interactionCreateListener } from './discord/listeners/InteractionCreateListener';
 import { readyListener } from './discord/listeners/ReadyListener';
 import { messageUpdateListener } from './discord/listeners/MessageUpdateListener';
+import { updateGlobalEmojiList } from './utils/CustomEmojiUtils';
 
 export const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES'],
@@ -19,6 +20,7 @@ export const prismaClient = new PrismaClient();
 
 async function main() {
   client.login(process.env.DISCORD_TOKEN);
+  await updateGlobalEmojiList();
 }
 
 main()

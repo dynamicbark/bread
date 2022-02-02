@@ -1,3 +1,4 @@
+import { ApplicationCommandOptionType } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
 import { prismaClient } from '../..';
 import { isEnabledChannel } from '../../utils/DatabaseUtils';
@@ -9,6 +10,14 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
     super({
       name: 'togglebreadonly',
       description: 'Toggle if the current channel should be a bread only channel.',
+      options: [
+        {
+          type: ApplicationCommandOptionType.Boolean,
+          name: 'allow_custom_emojis',
+          description: 'If the custom bread emojis should be allowed in this channel. (Default: false)',
+          required: false,
+        },
+      ],
     });
   }
 
@@ -47,10 +56,13 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
         ephemeral: false,
       });
     } else {
+      let allowCustomEmojis = commandInteraction.options.getBoolean('allow_custom_emojis', false);
+      if (allowCustomEmojis === null) allowCustomEmojis = false;
       await prismaClient.enabledChannel.create({
         data: {
           guild_id: BigInt(commandInteraction.guildId),
           channel_id: BigInt(currentChannelId),
+          allow_custom_emojis: allowCustomEmojis,
         },
       });
       let additionalMessage = '';
@@ -58,7 +70,9 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
         additionalMessage = `Please give ${commandInteraction.client.user?.username} the manage messages permission, without this permission, it cannot delete non-bread messages.`;
       }
       return commandInteraction.reply({
-        content: ['The current channel is now a bread only channel.', additionalMessage].join('\n').trim(),
+        content: [`The current channel is now a bread only channel.${allowCustomEmojis ? ' (With custom emojis)' : ''}`, additionalMessage]
+          .join('\n')
+          .trim(),
         ephemeral: false,
       });
     }
