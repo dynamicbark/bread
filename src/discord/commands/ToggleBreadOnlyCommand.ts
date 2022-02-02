@@ -24,6 +24,12 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
         ephemeral: true,
       });
     }
+    if (commandInteraction.channel?.isThread()) {
+      return commandInteraction.reply({
+        content: 'This command cannot be run in this channel.',
+        ephemeral: true,
+      });
+    }
     const isRunInEnabledChannel = await isEnabledChannel(commandInteraction.guildId, commandInteraction.channelId);
     if (isRunInEnabledChannel) {
       await prismaClient.enabledChannel.delete({

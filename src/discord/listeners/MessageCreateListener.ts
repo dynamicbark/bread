@@ -16,7 +16,9 @@ const legacyMessageCommands = [
 export async function messageCreateListener(message: Message): Promise<void> {
   if (!message.inGuild()) return; // Make sure the message is from a guild
   if (message.author.id === message.client.user?.id) return; // Ignore the message if it is from the bot
-  const isInEnabledChannel = await isEnabledChannel(message.guildId, message.channelId);
+  const channel = message.channel; // For thread check
+  const channelId = channel.isThread() && channel.parentId !== null ? channel.parentId : message.channelId; // Treat threads the same as the parent channel
+  const isInEnabledChannel = await isEnabledChannel(message.guildId, channelId);
   // Enabled channel checks
   if (isInEnabledChannel) {
     if (message.author.bot) return attemptDelete(message);
@@ -26,7 +28,7 @@ export async function messageCreateListener(message: Message): Promise<void> {
   if (message.content.includes('🍞')) {
     addToCounterQueue({
       guildId: message.guildId,
-      channelId: message.channelId,
+      channelId,
       userId: message.author.id,
     });
     addToUserQueue({
