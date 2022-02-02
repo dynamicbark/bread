@@ -1,12 +1,7 @@
 import { prismaClient } from '../';
 import Queue, { QueueWorkerCallback } from 'queue';
 
-const counterQueue = new Queue({
-  concurrency: 1,
-  autostart: true,
-});
-
-const userQueue = new Queue({
+const databaseQueue = new Queue({
   concurrency: 1,
   autostart: true,
 });
@@ -64,7 +59,7 @@ function counterQueueItemProcess(job: CounterQueueItem, callback: QueueWorkerCal
 }
 
 export function addToCounterQueue(counterQueueItem: CounterQueueItem) {
-  counterQueue.push((callback) => {
+  databaseQueue.push((callback) => {
     counterQueueItemProcess(counterQueueItem, callback!);
   });
 }
@@ -97,7 +92,7 @@ export function userQueueItemProcess(job: UserQueueItem, callback: QueueWorkerCa
 }
 
 export function addToUserQueue(userQueueItem: UserQueueItem) {
-  userQueue.push((callback) => {
+  databaseQueue.push((callback) => {
     userQueueItemProcess(userQueueItem, callback!);
   });
 }
