@@ -26,6 +26,5 @@
     "queue": "^6.0.2",
     "random-seed": "^0.3.0",
     "unique-names-generator": "^4.6.0"
-  },
-  "packageManager": "yarn@3.1.1"
+  }
 }

@@ -1,10 +1,10 @@
-import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types';
+import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
 
 export abstract class DiscordChatInputCommand {
-  public readonly commandConfiguration: RESTPostAPIChatInputApplicationCommandsJSONBody;
+  public readonly commandConfiguration: RESTPostAPIApplicationCommandsJSONBody;
 
-  constructor(commandConfiguration: RESTPostAPIChatInputApplicationCommandsJSONBody) {
+  constructor(commandConfiguration: RESTPostAPIApplicationCommandsJSONBody) {
     this.commandConfiguration = commandConfiguration;
   }
 

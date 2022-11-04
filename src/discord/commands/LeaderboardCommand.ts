@@ -8,7 +8,7 @@ import {
   UserLeaderboardItem,
 } from '../../utils/DatabaseUtils';
 import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils';
-import { generateName, getPrivateNameForUser } from '../../utils/UsernameUtils';
+import { getPrivateNameForUser } from '../../utils/UsernameUtils';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
 
 export class LeaderboardCommand extends DiscordChatInputCommand {

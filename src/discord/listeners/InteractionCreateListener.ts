@@ -1,5 +1,5 @@
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types';
-import { Client, Interaction } from 'discord.js';
+import { ApplicationCommandDataResolvable, Client, Interaction } from 'discord.js';
 import { LeaderboardCommand } from '../commands/LeaderboardCommand';
 import { PrivacyCommand } from '../commands/PrivacyCommand';
 import { StatsCommand } from '../commands/StatsCommand';
@@ -54,5 +54,5 @@ export async function registerCommandsOnDiscord(client: Client<true>) {
   globalChatInputCommandMap.forEach((globalChatInputCommand) => {
     globalCommands.push(globalChatInputCommand.commandConfiguration);
   });
-  await client.application.commands.set(globalCommands);
+  await client.application.commands.set(globalCommands as unknown as ApplicationCommandDataResolvable[]);
 }
