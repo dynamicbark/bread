@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import { prismaClient } from '../..';
 import { getUser } from '../../utils/DatabaseUtils';
 import { userQueueItemProcess } from '../../utils/QueueUtils';
@@ -31,7 +31,7 @@ export class PrivacyCommand extends DiscordChatInputCommand {
     });
   }
 
-  async handle(commandInteraction: CommandInteraction): Promise<void> {
+  async handle(commandInteraction: ChatInputCommandInteraction): Promise<unknown> {
     // Add the user to the database if they aren't there
     await new Promise((resolve) => {
       userQueueItemProcess(

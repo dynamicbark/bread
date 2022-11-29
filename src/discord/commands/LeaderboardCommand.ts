@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, CommandInteraction } from 'discord.js';
 import {
   getGlobalUsersLeaderboard,
   getGuildUsersLeaderboard,
@@ -37,7 +37,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
     });
   }
 
-  async handle(commandInteraction: CommandInteraction): Promise<void> {
+  async handle(commandInteraction: ChatInputCommandInteraction): Promise<unknown> {
     const currentChannelId = getCurrentCommandInteractionChannelId(commandInteraction);
     if (!commandInteraction.inGuild()) {
       return commandInteraction.reply({

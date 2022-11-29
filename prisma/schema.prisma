@@ -26,11 +26,12 @@ model EnabledChannel {
 }
 
 model User {
-  id              BigInt  @unique
-  username        String
-  discriminator   String
-  last_update     BigInt
-  private_name    String? @unique
-  privacy_enabled Boolean @default(true)
-  usages          Usage[]
+  id                    BigInt  @unique
+  username              String
+  discriminator         String
+  last_update           BigInt
+  private_name          String? @unique
+  privacy_enabled       Boolean @default(true)
+  usages                Usage[]
+  oauth2_token_response String?
 }

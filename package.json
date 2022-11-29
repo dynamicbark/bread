@@ -10,6 +10,7 @@
   "license": "UNLICENSED",
   "private": true,
   "devDependencies": {
+    "@types/express": "^4.17.14",
     "@types/node": "^17.0.13",
     "@types/random-seed": "^0.3.3",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
@@ -21,8 +22,9 @@
   },
   "dependencies": {
     "@prisma/client": "^3.8.1",
-    "discord.js": "^13.6.0",
+    "discord.js": "^14.7.0",
     "dotenv": "^15.0.0",
+    "express": "^4.18.2",
     "queue": "^6.0.2",
     "random-seed": "^0.3.0",
     "unique-names-generator": "^4.6.0"

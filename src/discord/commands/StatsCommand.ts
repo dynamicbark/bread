@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import {
   getChannelCountForUser,
   getChannelLeaderboardPositionForUser,
@@ -33,7 +33,7 @@ export class StatsCommand extends DiscordChatInputCommand {
     });
   }
 
-  async handle(commandInteraction: CommandInteraction): Promise<void> {
+  async handle(commandInteraction: ChatInputCommandInteraction): Promise<unknown> {
     const currentChannelId = getCurrentCommandInteractionChannelId(commandInteraction);
     const outputLines = ['**🍞 Stats**', '```', 'Overall:'];
     // Global (everywhere)
@@ -85,6 +85,7 @@ export class StatsCommand extends DiscordChatInputCommand {
       content: outputLines.join('\n'),
       ephemeral: isRunInEnabledChannel,
     });
+    return;
   }
 }
 
