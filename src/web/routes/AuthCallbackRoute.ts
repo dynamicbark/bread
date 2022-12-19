@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { client, prismaClient } from '../..';
 import { refreshProfileMetadata } from '../../utils/DiscordUtils';
+import { userQueueItemProcess } from '../../utils/QueueUtils';
 
 export async function authCallbackRoute(req: Request, res: Response) {
   if (!req.query.code) {
@@ -39,6 +40,19 @@ export async function authCallbackRoute(req: Request, res: Response) {
     },
   });
   const usersMeResponseJson = await usersMeResponse.json();
+  // Make sure the user is in the database before doing the oauth2 callback
+  await new Promise<void>((resolve) => {
+    userQueueItemProcess(
+      {
+        userId: usersMeResponseJson.id,
+        username: usersMeResponseJson.username,
+        discriminator: usersMeResponseJson.discriminator,
+      },
+      (err, data) => {
+        resolve();
+      }
+    );
+  });
   // Store the token information in the database
   await prismaClient.user.update({
     where: {
