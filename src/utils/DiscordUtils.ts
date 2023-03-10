@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { CommandInteraction, Message } from 'discord.js';
 import { client, prismaClient } from '..';
 import { getGlobalCountForUser, getUser } from './DatabaseUtils';
@@ -27,19 +28,26 @@ export async function getUserOauth2AccessToken(userId: string): Promise<
       error: 'UNKNOWN_USER' | 'REFRESH_TOKEN_RATELIMITED' | 'INVALID_REFRESH_TOKEN';
     }
 > {
-  // Add the user to the database if they aren't there
-  await new Promise((resolve) => {
-    userQueueItemProcess(
-      {
-        userId,
-        username: 'Unknown User',
-        discriminator: '0000',
-      },
-      resolve
-    );
-  });
-  const user = await getUser(BigInt(userId));
-  if (!user?.oauth2_token_response) {
+  let user: User | null = null;
+  try {
+    user = await getUser(BigInt(userId));
+    if (!user) {
+      throw new Error('User not found in the database.');
+    }
+  } catch (e) {
+    // Add the user to the database if they aren't there
+    await new Promise((resolve) => {
+      userQueueItemProcess(
+        {
+          userId,
+          username: 'Unknown User',
+          discriminator: '0000',
+        },
+        resolve
+      );
+    });
+  }
+  if (!user || !user?.oauth2_token_response) {
     return {
       error: 'UNKNOWN_USER',
     };
