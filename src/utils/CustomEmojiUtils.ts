@@ -3,7 +3,7 @@ import { readFile } from 'fs/promises';
 let globalEmojiList: string[] = [];
 
 export async function updateGlobalEmojiList(): Promise<void> {
-  let oldListLength = globalEmojiList.length;
+  const oldListLength = globalEmojiList.length;
   const fileContents = (await readFile('./data/globalEmojis.json')).toString().trim();
   try {
     JSON.parse(fileContents);

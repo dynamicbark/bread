@@ -48,7 +48,7 @@ export async function authCallbackRoute(req: Request, res: Response) {
         username: usersMeResponseJson.username,
         discriminator: usersMeResponseJson.discriminator,
       },
-      (err, data) => {
+      (_err, _data) => {
         resolve();
       }
     );

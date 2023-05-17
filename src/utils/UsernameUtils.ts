@@ -19,7 +19,7 @@ export function generateName(seed?: string) {
 }
 
 export async function generateRandomPrivateNameForUser(userId: bigint): Promise<string> {
-  let generatedName = generateName();
+  const generatedName = generateName();
   let nameAvailable = false;
   while (!nameAvailable) {
     const foundUser = await prismaClient.user.findUnique({

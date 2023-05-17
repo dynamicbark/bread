@@ -9,7 +9,7 @@ export async function authStartRoute(req: Request, res: Response) {
     response_type: 'code',
     scope: 'identify role_connections.write',
   };
-  for (let [key, val] of Object.entries(components)) {
+  for (const [key, val] of Object.entries(components)) {
     redirectUrl.searchParams.append(key, val);
   }
   res.redirect(redirectUrl.toString());

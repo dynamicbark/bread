@@ -116,7 +116,7 @@ async function formatUsersLeaderboard(
 }
 
 function cleanDisplayName(displayName: string): string {
-  return displayName.replace(/\`/g, '');
+  return displayName.replace(/`/g, '');
 }
 
 function formatLeaderboardPlace(place: number): string {

@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint \"**/*.ts\" --max-warnings=0",
+    "fix": "eslint \"**/*.ts\" --fix --max-warnings=0"
   },
   "author": "Skyz",
   "license": "UNLICENSED",
