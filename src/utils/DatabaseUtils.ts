@@ -1,5 +1,5 @@
 import { EnabledChannel, User } from '@prisma/client';
-import { prismaClient } from '../';
+import { prismaClient } from '../index.js';
 
 export async function isEnabledChannel(guildId: string, channelId: string): Promise<boolean> {
   const foundChannelCount = await prismaClient.enabledChannel.count({

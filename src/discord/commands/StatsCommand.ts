@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from 'discord-api-types';
+import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction } from 'discord.js';
 import {
   getChannelCountForUser,
@@ -12,10 +12,10 @@ import {
   getGuildCountForUser,
   getGuildLeaderboardPositionForUser,
   isEnabledChannel,
-} from '../../utils/DatabaseUtils';
-import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils';
-import { addToUserQueue } from '../../utils/QueueUtils';
-import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
+} from '../../utils/DatabaseUtils.js';
+import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils.js';
+import { addToUserQueue } from '../../utils/QueueUtils.js';
+import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand.js';
 
 export class StatsCommand extends DiscordChatInputCommand {
   constructor() {

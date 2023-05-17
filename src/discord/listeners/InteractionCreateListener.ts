@@ -1,11 +1,11 @@
-import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types';
+import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ApplicationCommandDataResolvable, Client, Interaction } from 'discord.js';
-import { LeaderboardCommand } from '../commands/LeaderboardCommand';
-import { PrivacyCommand } from '../commands/PrivacyCommand';
-import { RefreshCommand } from '../commands/RefreshCommand';
-import { StatsCommand } from '../commands/StatsCommand';
-import { ToggleBreadOnlyCommand } from '../commands/ToggleBreadOnlyCommand';
-import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
+import { LeaderboardCommand } from '../commands/LeaderboardCommand.js';
+import { PrivacyCommand } from '../commands/PrivacyCommand.js';
+import { RefreshCommand } from '../commands/RefreshCommand.js';
+import { StatsCommand } from '../commands/StatsCommand.js';
+import { ToggleBreadOnlyCommand } from '../commands/ToggleBreadOnlyCommand.js';
+import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand.js';
 
 const globalChatInputCommandMap = new Map<string, DiscordChatInputCommand>();
 

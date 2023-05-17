@@ -1,8 +1,8 @@
 import { User } from '@prisma/client';
 import { CommandInteraction, Message } from 'discord.js';
-import { client, prismaClient } from '..';
-import { getGlobalCountForUser, getUser } from './DatabaseUtils';
-import { userQueueItemProcess } from './QueueUtils';
+import { client, prismaClient } from '../index.js';
+import { getGlobalCountForUser, getUser } from './DatabaseUtils.js';
+import { userQueueItemProcess } from './QueueUtils.js';
 
 export async function attemptMessageDelete(message: Message): Promise<void> {
   if (!message.deletable) return;

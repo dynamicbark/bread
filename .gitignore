@@ -7,12 +7,3 @@
 !/.env.example
 # Don't ignore the example data
 !/data-example*
-
-# Yarn
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

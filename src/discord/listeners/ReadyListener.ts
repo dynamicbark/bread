@@ -1,5 +1,5 @@
 import { Client } from 'discord.js';
-import { registerCommandsOnDiscord } from './InteractionCreateListener';
+import { registerCommandsOnDiscord } from './InteractionCreateListener.js';
 
 export async function readyListener(clientObject: Client<true>): Promise<void> {
   console.log(`Logged in as ${clientObject.user.tag}.`);

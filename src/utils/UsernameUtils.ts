@@ -1,7 +1,7 @@
-import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
 import randomSeed from 'random-seed';
-import { prismaClient } from '..';
-import { getUser } from './DatabaseUtils';
+import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
+import { prismaClient } from '../index.js';
+import { getUser } from './DatabaseUtils.js';
 
 export function generateName(seed?: string) {
   if (!seed) seed = randomSeed.create().string(16);

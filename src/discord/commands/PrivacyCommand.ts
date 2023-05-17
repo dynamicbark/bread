@@ -1,10 +1,10 @@
-import { ApplicationCommandOptionType } from 'discord-api-types';
+import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction } from 'discord.js';
-import { prismaClient } from '../..';
-import { getUser } from '../../utils/DatabaseUtils';
-import { userQueueItemProcess } from '../../utils/QueueUtils';
-import { generateRandomPrivateNameForUser, getPrivateNameForUser } from '../../utils/UsernameUtils';
-import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
+import { prismaClient } from '../../index.js';
+import { getUser } from '../../utils/DatabaseUtils.js';
+import { userQueueItemProcess } from '../../utils/QueueUtils.js';
+import { generateRandomPrivateNameForUser, getPrivateNameForUser } from '../../utils/UsernameUtils.js';
+import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand.js';
 
 export class PrivacyCommand extends DiscordChatInputCommand {
   constructor() {

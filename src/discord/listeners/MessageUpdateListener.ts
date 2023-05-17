@@ -1,7 +1,7 @@
 import { Message, PartialMessage } from 'discord.js';
-import { inputEqualsValidEmoji } from '../../utils/CustomEmojiUtils';
-import { getEnabledChannel } from '../../utils/DatabaseUtils';
-import { attemptMessageDelete } from '../../utils/DiscordUtils';
+import { inputEqualsValidEmoji } from '../../utils/CustomEmojiUtils.js';
+import { getEnabledChannel } from '../../utils/DatabaseUtils.js';
+import { attemptMessageDelete } from '../../utils/DiscordUtils.js';
 
 export async function messageUpdateListener(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {
   if (!newMessage.inGuild()) return; // Make sure the message is from a guild

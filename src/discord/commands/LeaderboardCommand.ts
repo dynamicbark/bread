@@ -1,15 +1,15 @@
-import { ApplicationCommandOptionType } from 'discord-api-types';
-import { ChatInputCommandInteraction, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+import { ChatInputCommandInteraction } from 'discord.js';
 import {
+  UserLeaderboardItem,
   getGlobalUsersLeaderboard,
   getGuildUsersLeaderboard,
   getUser,
   isEnabledChannel,
-  UserLeaderboardItem,
-} from '../../utils/DatabaseUtils';
-import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils';
-import { getPrivateNameForUser } from '../../utils/UsernameUtils';
-import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
+} from '../../utils/DatabaseUtils.js';
+import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils.js';
+import { getPrivateNameForUser } from '../../utils/UsernameUtils.js';
+import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand.js';
 
 export class LeaderboardCommand extends DiscordChatInputCommand {
   constructor() {

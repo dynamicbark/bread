@@ -1,14 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import { Client, GatewayIntentBits } from 'discord.js';
-import express from 'express';
 import 'dotenv/config';
-import { messageCreateListener } from './discord/listeners/MessageCreateListener';
-import { interactionCreateListener } from './discord/listeners/InteractionCreateListener';
-import { readyListener } from './discord/listeners/ReadyListener';
-import { messageUpdateListener } from './discord/listeners/MessageUpdateListener';
-import { updateGlobalEmojiList } from './utils/CustomEmojiUtils';
-import { authStartRoute } from './web/routes/AuthStartRoute';
-import { authCallbackRoute } from './web/routes/AuthCallbackRoute';
+import express from 'express';
+import { interactionCreateListener } from './discord/listeners/InteractionCreateListener.js';
+import { messageCreateListener } from './discord/listeners/MessageCreateListener.js';
+import { messageUpdateListener } from './discord/listeners/MessageUpdateListener.js';
+import { readyListener } from './discord/listeners/ReadyListener.js';
+import { updateGlobalEmojiList } from './utils/CustomEmojiUtils.js';
+import { authCallbackRoute } from './web/routes/AuthCallbackRoute.js';
+import { authStartRoute } from './web/routes/AuthStartRoute.js';
 
 export const expressApplication = express();
 

@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { refreshProfileMetadata } from '../../utils/DiscordUtils';
-import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
+import { refreshProfileMetadata } from '../../utils/DiscordUtils.js';
+import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand.js';
 
 export class RefreshCommand extends DiscordChatInputCommand {
   constructor() {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { client } from '../..';
+import { client } from '../../index.js';
 
 export async function authStartRoute(req: Request, res: Response) {
   const redirectUrl = new URL('https://discord.com/api/oauth2/authorize');

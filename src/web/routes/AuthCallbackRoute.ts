@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { client, prismaClient } from '../..';
-import { refreshProfileMetadata } from '../../utils/DiscordUtils';
-import { userQueueItemProcess } from '../../utils/QueueUtils';
+import { client, prismaClient } from '../../index.js';
+import { refreshProfileMetadata } from '../../utils/DiscordUtils.js';
+import { userQueueItemProcess } from '../../utils/QueueUtils.js';
 
 export async function authCallbackRoute(req: Request, res: Response) {
   if (!req.query.code) {

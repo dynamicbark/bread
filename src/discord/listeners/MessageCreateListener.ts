@@ -1,8 +1,8 @@
 import { Message } from 'discord.js';
-import { inputContainsValidEmoji, inputEqualsValidEmoji } from '../../utils/CustomEmojiUtils';
-import { getEnabledChannel } from '../../utils/DatabaseUtils';
-import { attemptMessageDelete } from '../../utils/DiscordUtils';
-import { addToUserQueue, addToCounterQueue } from '../../utils/QueueUtils';
+import { inputContainsValidEmoji, inputEqualsValidEmoji } from '../../utils/CustomEmojiUtils.js';
+import { getEnabledChannel } from '../../utils/DatabaseUtils.js';
+import { attemptMessageDelete } from '../../utils/DiscordUtils.js';
+import { addToCounterQueue, addToUserQueue } from '../../utils/QueueUtils.js';
 
 export async function messageCreateListener(message: Message): Promise<void> {
   if (!message.inGuild()) return; // Make sure the message is from a guild

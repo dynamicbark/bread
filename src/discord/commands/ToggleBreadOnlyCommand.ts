@@ -1,9 +1,9 @@
-import { ApplicationCommandOptionType } from 'discord-api-types';
+import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
-import { prismaClient } from '../..';
-import { isEnabledChannel } from '../../utils/DatabaseUtils';
-import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils';
-import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand';
+import { prismaClient } from '../../index.js';
+import { isEnabledChannel } from '../../utils/DatabaseUtils.js';
+import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils.js';
+import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand.js';
 
 export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
   constructor() {

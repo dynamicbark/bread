@@ -1,5 +1,5 @@
-import { prismaClient } from '../';
 import Queue, { QueueWorkerCallback } from 'queue';
+import { prismaClient } from '../index.js';
 
 const databaseQueue = new Queue({
   concurrency: 1,
