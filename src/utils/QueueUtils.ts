@@ -60,7 +60,7 @@ function counterQueueItemProcess(job: CounterQueueItem, callback: QueueWorkerCal
 
 export function addToCounterQueue(counterQueueItem: CounterQueueItem) {
   databaseQueue.push((callback) => {
-    counterQueueItemProcess(counterQueueItem, callback!);
+    counterQueueItemProcess(counterQueueItem, callback as QueueWorkerCallback);
   });
 }
 
@@ -90,6 +90,6 @@ export function userQueueItemProcess(job: UserQueueItem, callback: QueueWorkerCa
 
 export function addToUserQueue(userQueueItem: UserQueueItem) {
   databaseQueue.push((callback) => {
-    userQueueItemProcess(userQueueItem, callback!);
+    userQueueItemProcess(userQueueItem, callback as QueueWorkerCallback);
   });
 }

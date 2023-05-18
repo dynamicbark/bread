@@ -198,7 +198,7 @@ export type UserLeaderboardItem = {
 };
 
 // Get global users leaderboard
-export async function getGlobalUsersLeaderboard(guildId: string): Promise<UserLeaderboardItem[]> {
+export async function getGlobalUsersLeaderboard(): Promise<UserLeaderboardItem[]> {
   const usageLeaderboardResponse = await prismaClient.usage.groupBy({
     by: ['user_id'],
     _sum: {

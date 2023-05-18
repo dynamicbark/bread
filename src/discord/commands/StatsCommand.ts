@@ -57,7 +57,8 @@ export class StatsCommand extends DiscordChatInputCommand {
       discriminator: specifiedUser.discriminator,
     });
     outputLines.push(`---`);
-    outputLines.push(`${specifiedUser.tag.replace(/\^/g, '')}:`);
+    const discordName = specifiedUser.discriminator !== '0' ? `${specifiedUser.tag}` : `@${specifiedUser.username}`;
+    outputLines.push(`${discordName.replace(/`/g, '')}:`);
     // User (everywhere)
     const userGlobalPosition = await getGlobalLeaderboardPositionForUser(specifiedUser.id);
     const userGlobalCount = await getGlobalCountForUser(specifiedUser.id);

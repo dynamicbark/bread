@@ -67,7 +67,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
       // Global users leaderboard
       outputLines.push('**Leaderboard** (Global users)');
       outputLines.push('```');
-      const globalUsersLeaderboard = await getGlobalUsersLeaderboard(commandInteraction.guildId);
+      const globalUsersLeaderboard = await getGlobalUsersLeaderboard();
       const formattedLeaderboardLines = await formatUsersLeaderboard(globalUsersLeaderboard, BigInt(commandInteraction.user.id), {
         hideOtherNames: true,
       });
@@ -102,7 +102,8 @@ async function formatUsersLeaderboard(
     if (shouldHideName && hiddenName === null) {
       hiddenName = await getPrivateNameForUser(user.id);
     }
-    const displayName = cleanDisplayName(shouldHideName && user.privacy_enabled ? hiddenName! : `${user.username}#${user.discriminator}`);
+    const discordName = user.discriminator !== '0' ? `${user.username}#${user.discriminator}` : `@${user.username}`;
+    const displayName = cleanDisplayName(shouldHideName && user.privacy_enabled ? (hiddenName as string) : discordName);
     outputLines.push(
       formatLeaderboardPlace(usersLeaderboard[i].place).padEnd(5, ' ') +
         ' - ' +
