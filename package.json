@@ -12,6 +12,9 @@
   "author": "Skyz",
   "license": "ISC",
   "private": true,
+  "bin": {
+    "bread": "dist/index.js"
+  },
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^18.16.12",
