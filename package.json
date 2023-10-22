@@ -10,7 +10,7 @@
     "fix": "eslint \"**/*.ts\" --fix --max-warnings=0"
   },
   "author": "Skyz",
-  "license": "UNLICENSED",
+  "license": "ISC",
   "private": true,
   "devDependencies": {
     "@types/express": "^4.17.17",
