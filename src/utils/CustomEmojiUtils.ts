@@ -4,7 +4,7 @@ let globalEmojiList: string[] = [];
 
 export async function updateGlobalEmojiList(): Promise<void> {
   const oldListLength = globalEmojiList.length;
-  const fileContents = (await readFile('./data/globalEmojis.json')).toString().trim();
+  const fileContents = (await readFile(process.env.GLOBAL_EMOJIS_PATH || './data/globalEmojis.json')).toString().trim();
   try {
     JSON.parse(fileContents);
   } catch (e) {
