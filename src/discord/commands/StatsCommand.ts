@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/v10';
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import {
   getChannelCountForUser,
   getChannelLeaderboardPositionForUser,
@@ -72,7 +72,7 @@ export class StatsCommand extends DiscordChatInputCommand {
       const userChannelPosition = await getChannelLeaderboardPositionForUser(
         commandInteraction.guildId,
         currentChannelId,
-        specifiedUser.id
+        specifiedUser.id,
       );
       const userChannelCount = await getChannelCountForUser(commandInteraction.guildId, currentChannelId, specifiedUser.id);
       outputLines.push(`Channel : ${userChannelCount.toLocaleString('en-US') + formatPlace(userChannelPosition, userChannelCount)}`);
@@ -82,9 +82,10 @@ export class StatsCommand extends DiscordChatInputCommand {
     const isRunInEnabledChannel = commandInteraction.inGuild()
       ? await isEnabledChannel(commandInteraction.guildId, currentChannelId)
       : false;
+    const replyFlags = isRunInEnabledChannel ? MessageFlags.Ephemeral : undefined;
     commandInteraction.reply({
       content: outputLines.join('\n'),
-      ephemeral: isRunInEnabledChannel,
+      flags: replyFlags,
     });
     return;
   }

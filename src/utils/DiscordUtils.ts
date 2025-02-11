@@ -1,4 +1,5 @@
 import { User } from '@prisma/client';
+import { RESTPostOAuth2RefreshTokenResult } from 'discord-api-types/v10';
 import { CommandInteraction, Message } from 'discord.js';
 import { client, prismaClient } from '../index.js';
 import { getGlobalCountForUser, getUser } from './DatabaseUtils.js';
@@ -34,7 +35,7 @@ export async function getUserOauth2AccessToken(userId: string): Promise<
     if (!user) {
       throw new Error('User not found in the database.');
     }
-  } catch (e) {
+  } catch {
     // Add the user to the database if they aren't there
     await new Promise((resolve) => {
       userQueueItemProcess(
@@ -43,7 +44,7 @@ export async function getUserOauth2AccessToken(userId: string): Promise<
           username: 'Unknown User',
           discriminator: '0000',
         },
-        resolve
+        resolve,
       );
     });
   }
@@ -95,7 +96,7 @@ export async function getUserOauth2AccessToken(userId: string): Promise<
         error: 'INVALID_REFRESH_TOKEN',
       };
     }
-    const tokenResponseJson = await tokenResponse.json();
+    const tokenResponseJson = (await tokenResponse.json()) as RESTPostOAuth2RefreshTokenResult;
     // Store the token information in the database
     await prismaClient.user.update({
       where: {

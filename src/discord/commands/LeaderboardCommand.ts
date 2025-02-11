@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/v10';
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import {
   UserLeaderboardItem,
   getGlobalUsersLeaderboard,
@@ -42,7 +42,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
     if (!commandInteraction.inGuild()) {
       return commandInteraction.reply({
         content: 'This command must be used in a guild.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
     const outputLines = [];
@@ -52,7 +52,7 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
     if (!['guild/users', 'global/users'].includes(mode)) {
       return commandInteraction.reply({
         content: 'The mode specified is not valid.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
     if (mode === 'guild/users') {
@@ -78,9 +78,10 @@ export class LeaderboardCommand extends DiscordChatInputCommand {
     const isRunInEnabledChannel = commandInteraction.inGuild()
       ? await isEnabledChannel(commandInteraction.guildId, currentChannelId)
       : false;
+    const responseFlags = isRunInEnabledChannel ? MessageFlags.Ephemeral : undefined;
     commandInteraction.reply({
       content: outputLines.join('\n'),
-      ephemeral: isRunInEnabledChannel,
+      flags: responseFlags,
     });
   }
 }
@@ -90,7 +91,7 @@ async function formatUsersLeaderboard(
   requestUserId: bigint,
   options?: {
     hideOtherNames?: boolean;
-  }
+  },
 ): Promise<string[]> {
   const hideOtherNames = options?.hideOtherNames || false;
   const outputLines = [];
@@ -110,7 +111,7 @@ async function formatUsersLeaderboard(
         usersLeaderboard[i].count.toLocaleString('en-US') +
         ' - ' +
         displayName +
-        (requestUserId === usersLeaderboard[i].user_id ? ' (You)' : '')
+        (requestUserId === usersLeaderboard[i].user_id ? ' (You)' : ''),
     );
   }
   return outputLines;

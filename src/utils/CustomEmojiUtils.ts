@@ -7,7 +7,7 @@ export async function updateGlobalEmojiList(): Promise<void> {
   const fileContents = (await readFile(process.env.GLOBAL_EMOJIS_PATH || './data/globalEmojis.json')).toString().trim();
   try {
     JSON.parse(fileContents);
-  } catch (e) {
+  } catch {
     console.log(`Global emoji list parsing failed. Skipping update.`);
     return;
   }

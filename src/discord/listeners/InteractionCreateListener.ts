@@ -1,5 +1,5 @@
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { ApplicationCommandDataResolvable, Client, Interaction } from 'discord.js';
+import { ApplicationCommandDataResolvable, Client, Interaction, MessageFlags } from 'discord.js';
 import { LeaderboardCommand } from '../commands/LeaderboardCommand.js';
 import { PrivacyCommand } from '../commands/PrivacyCommand.js';
 import { RefreshCommand } from '../commands/RefreshCommand.js';
@@ -25,7 +25,7 @@ export async function interactionCreateListener(interaction: Interaction): Promi
     if (!discordCommand) {
       await interaction.reply({
         content: 'The command requested was not found.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
@@ -44,7 +44,7 @@ export async function interactionCreateListener(interaction: Interaction): Promi
       } else {
         await interaction.reply({
           content: 'The command encountered an error while running.',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
       }
     }
