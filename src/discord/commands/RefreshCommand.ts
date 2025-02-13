@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { refreshProfileMetadata } from '../../utils/DiscordUtils.js';
 import { DiscordChatInputCommand } from '../types/DiscordChatInputCommand.js';
 
@@ -12,7 +12,7 @@ export class RefreshCommand extends DiscordChatInputCommand {
 
   async handle(commandInteraction: ChatInputCommandInteraction): Promise<unknown> {
     await commandInteraction.deferReply({
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     });
     const refreshSucessful = await refreshProfileMetadata(commandInteraction.user.id);
     if (!refreshSucessful) {

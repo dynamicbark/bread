@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/v10';
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { prismaClient } from '../../index.js';
 import { getUser } from '../../utils/DatabaseUtils.js';
 import { userQueueItemProcess } from '../../utils/QueueUtils.js';
@@ -40,7 +40,7 @@ export class PrivacyCommand extends DiscordChatInputCommand {
           username: commandInteraction.user.username,
           discriminator: commandInteraction.user.discriminator,
         },
-        resolve
+        resolve,
       );
     });
     const user = await getUser(BigInt(commandInteraction.user.id));
@@ -57,14 +57,14 @@ export class PrivacyCommand extends DiscordChatInputCommand {
           `Privacy Enabled: ${user?.privacy_enabled ? 'Yes' : 'No'}`,
           '```',
         ].join('\n'),
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     } else if (subcommandUsed === 'rotatename') {
       // Rotate the private name
       const generatedPrivateName = await generateRandomPrivateNameForUser(BigInt(commandInteraction.user.id));
       return commandInteraction.reply({
         content: `Your private name has been changed to \`${generatedPrivateName}\`.`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     } else if (subcommandUsed === 'toggle') {
       // Toggle the privacy state
@@ -79,7 +79,7 @@ export class PrivacyCommand extends DiscordChatInputCommand {
       });
       return commandInteraction.reply({
         content: `Your privacy mode has been \`${newPrivacyEnabledState === true ? 'enabled' : 'disabled'}\`.`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
   }

@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/v10';
-import { ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags, PermissionFlagsBits } from 'discord.js';
 import { prismaClient } from '../../index.js';
 import { isEnabledChannel } from '../../utils/DatabaseUtils.js';
 import { getCurrentCommandInteractionChannelId } from '../../utils/DiscordUtils.js';
@@ -26,19 +26,19 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
     if (!commandInteraction.inGuild()) {
       return commandInteraction.reply({
         content: 'This command must be used in a guild.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
     if (!commandInteraction.memberPermissions.has(PermissionFlagsBits.ManageGuild)) {
       return commandInteraction.reply({
         content: 'You need to have manage server permissions to toggle the bread only channel state.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
     if (commandInteraction.channel?.isThread()) {
       return commandInteraction.reply({
         content: 'This command cannot be run in this channel.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
     const isRunInEnabledChannel = await isEnabledChannel(commandInteraction.guildId, currentChannelId);
@@ -53,7 +53,6 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
       });
       return commandInteraction.reply({
         content: 'The current channel is no longer a bread only channel.',
-        ephemeral: false,
       });
     } else {
       let allowCustomEmojis = commandInteraction.options.getBoolean('allow_custom_emojis', false);
@@ -76,7 +75,6 @@ export class ToggleBreadOnlyCommand extends DiscordChatInputCommand {
         content: [`The current channel is now a bread only channel.${allowCustomEmojis ? ' (With custom emojis)' : ''}`, additionalMessage]
           .join('\n')
           .trim(),
-        ephemeral: false,
       });
     }
   }
